@@ -3,7 +3,18 @@ import TaskManager from "./TaskManager.js";
 
 export default class DOMController {
     constructor(taskManager) {
-        this.taskManager = taskManager;
+        this.taskManager = new TaskManager();
+
+        let test = new Todo("test", "test description", "10/5", "Default", 0);
+        let test2 = new Todo("test2", "test description", "10/5", "Default", 0);
+        let test3 = new Todo("test3", "test description", "10/5", "Default", 0);
+
+        this.taskManager.addTask(test);
+        this.taskManager.addTask(test2);
+        this.taskManager.addTask(test3);
+
+        test.changePriority(1);
+
         this.content = document.getElementById("content");
         this.projectTitle = document.getElementById("project-title");
         this.tasksList = document.getElementById("tasks-list");
@@ -27,6 +38,7 @@ export default class DOMController {
             this.ChangeTitle("This Week");
         });
 
+        this.renderList(this.taskManager.getListAll());
     }
 
     ChangeTitle(title) {
@@ -37,6 +49,15 @@ export default class DOMController {
         list.forEach((task, index) => {
             const taskElement = document.createElement("div");
             taskElement.classList.add("task");
+
+            const check = document.createElement("input");
+            check.type = "checkbox";
+            check.addEventListener("click", () => { 
+                task.toggleCompleted();
+                if (task.completed) taskElement.classList.add("completed");
+                else taskElement.classList.remove("completed");
+            });
+            taskElement.append(check);
 
             const taskTitle = document.createElement("div");
             taskTitle.classList.add("task-title");
@@ -59,6 +80,9 @@ export default class DOMController {
 
             const deleteBtn = document.createElement("button");
             deleteBtn.textContent = "Delete";
+            deleteBtn.addEventListener("click", () => {
+                
+            });
             taskElement.append(deleteBtn);
 
             this.tasksList.append(taskElement);

@@ -36,6 +36,12 @@ header {
     gap: 10px;
     flex: auto;
     padding: 5px;
+    align-items: center;
+}
+
+.completed {
+    text-decoration: dashed;
+    background-color: grey;
 }
 
 .task-title {

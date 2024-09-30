@@ -14,6 +14,7 @@ export default class Todo {
 
     toggleCompleted() {
         this.completed = !this.completed;
+        console.log("toggle completed!");
     }
 
     editTodo(title, description, dueDate, priority) {

@@ -7,7 +7,15 @@ export default class TaskManager {
         this.todoList.push(task);
     }
 
-    getList() {
+    getListAll() {
         return this.todoList;
+    }
+
+    getListProject(project) {
+        return this.todoList.filter()
+    }
+
+    deleteTask(task) {
+        this.todoList.pop(task);
     }
 }
