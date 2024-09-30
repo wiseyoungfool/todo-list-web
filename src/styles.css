@@ -22,6 +22,35 @@ header {
     padding-left: 50px;
 }
 
+#tasks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 50%;
+    align-items: stretch;
+}
+
+.task {
+    background-color: green;
+    display: flex;
+    gap: 10px;
+    flex: auto;
+    padding: 5px;
+}
+
+.task-title {
+    color: white;
+}
+
+.task-desc {
+    color: grey;
+    margin-right: auto;
+}
+
+.task button {
+    justify-self: end;
+}
+
 main {
     flex: 1;
     display: flex;
