@@ -4,6 +4,8 @@ import TaskManager from "./TaskManager.js";
 export default class DOMController {
     constructor(taskManager) {
         this.taskManager = new TaskManager();
+        this.CreateNewTask = this.CreateNewTask.bind(this);
+        this.CreateNewProject = this.CreateNewProject.bind(this);
 
         let test = new Todo("test", "test description", "10/5", "Default", 0);
         let test2 = new Todo("test2", "test description", "10/5", "Default", 0);
@@ -23,7 +25,7 @@ export default class DOMController {
         this.todayBtn = document.getElementById("today-btn");
         this.weekBtn = document.getElementById("week-btn");
 
-        this.projectButtons = document.getElementById("project-buttons");
+        this.projectList = document.getElementById("project-list");
         this.newProjectBtn = document.getElementById("new-project-btn");
         this.newTaskBtn = document.getElementById("new-task-btn");
 
@@ -35,6 +37,9 @@ export default class DOMController {
 
         this.projectSubmit = document.getElementById("project-submit");
         this.taskSubmit = document.getElementById("task-submit");
+
+        this.newProjectForm = document.getElementById("new-project-form");
+        this.newTaskForm = document.getElementById("new-task-form");
 
         this.projectCancelButton.addEventListener("click", () => {
             this.newProjectDialog.close();
@@ -66,27 +71,62 @@ export default class DOMController {
             this.newTaskDialog.show();
         });
 
-        this.renderList(this.taskManager.getListAll());
+        this.renderList();
+        this.renderProjects();
     }
 
     CreateNewTask(event) {
-        event.preventDefault();
-        console.log("Created new task!");
-        document.getElementById("new-task-dialog").close();
+        if (document.querySelector("#new-task-form").checkValidity()) {
+            event.preventDefault();
+            const title = document.getElementById("new-task-title").value;
+            document.getElementById("new-task-title").value = "";
+            const desc = document.getElementById("new-task-desc").value;
+            document.getElementById("new-task-desc").value = "";
+            const dueDate = document.getElementById("new-task-date").value;
+            document.getElementById("new-task-date").value = "";
+            const priority = document.getElementById("new-task-priority").value;
+            document.getElementById("new-task-priority").value = "";
+
+            this.taskManager.createTask(title, desc, dueDate, "Default", priority, false);
+            console.log("Created new task!");
+            document.getElementById("new-task-dialog").close();
+
+            this.renderList();
+        }
     }
 
     CreateNewProject(event) {
-        event.preventDefault();
-        console.log("Created new project!");
-        document.getElementById("new-project-dialog").close();
+        if (document.querySelector("#new-project-form").checkValidity()) {
+            event.preventDefault();
+            const title = document.getElementById("new-project-title").value;
+            document.getElementById("new-project-title").value = "";
+            this.taskManager.addProject(title);
+            console.log(`Created new project: ${title}`);
+            document.getElementById("new-project-dialog").close();
+
+            this.renderProjects();
+        }
     }
 
     ChangeTitle(title) {
         this.projectTitle.textContent = title;
     }
 
-    renderList(list) {
-        list.forEach((task, index) => {
+    renderProjects() {
+        this.projectList.innerHTML = "";
+        const projects = this.taskManager.getProjectsList();
+
+        projects.forEach(project => {
+            const projectButton = document.createElement("button");
+            projectButton.textContent = project;
+
+            this.projectList.append(projectButton);
+        })
+    }
+
+    renderList() {
+        this.tasksList.innerHTML="";
+        this.taskManager.getListAll().forEach((task, index) => {
             const taskElement = document.createElement("div");
             taskElement.classList.add("task");
 

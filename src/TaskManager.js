@@ -1,6 +1,19 @@
+import Todo from "./todo-item.js";
+
 export default class TaskManager {
     constructor() {
         this.todoList = [];
+        this.projects = []
+
+        this.projects.push("Default");
+    }
+
+    addProject(project) {
+        this.projects.push(project);
+    }
+
+    getProjectsList() {
+        return this.projects;
     }
 
     addTask(task) {
@@ -20,7 +33,7 @@ export default class TaskManager {
     }
 
     createTask(title, description, dueDate, project="Default", priority, completed=false) {
-        task = new Todo(title, description, dueDate, project, priority, completed);
+        const task = new Todo(title, description, dueDate, project, priority, completed);
         this.addTask(task);
         console.log("Task Added!");
     }

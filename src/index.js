@@ -4,5 +4,3 @@ import DOMController from "./DOMController.js";
 
 
 const DOM = new DOMController();
-
-DOM.renderList();
