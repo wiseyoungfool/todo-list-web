@@ -6,10 +6,11 @@ export default class DOMController {
         this.taskManager = new TaskManager();
         this.CreateNewTask = this.CreateNewTask.bind(this);
         this.CreateNewProject = this.CreateNewProject.bind(this);
+        this.renderList = this.renderList.bind(this);
 
-        let test = new Todo("test", "test description", "10/5", "Default", 0);
-        let test2 = new Todo("test2", "test description", "10/5", "Default", 0);
-        let test3 = new Todo("test3", "test description", "10/5", "Default", 0);
+        let test = new Todo("test", "test description", "2024-10-02", "Default", 0);
+        let test2 = new Todo("test2", "test description", "2024-10-02", "Default", 0);
+        let test3 = new Todo("test3", "test description", "2024-10-02", "Default", 0);
 
         this.taskManager.addTask(test);
         this.taskManager.addTask(test2);
@@ -48,8 +49,8 @@ export default class DOMController {
             this.newTaskDialog.close();
         })
 
-        this.projectSubmit.addEventListener("click", this.CreateNewProject);
-        this.taskSubmit.addEventListener("click", this.CreateNewTask);
+        this.newProjectForm.addEventListener("submit", this.CreateNewProject);
+        this.newTaskForm.addEventListener("submit", this.CreateNewTask);
 
         this.allBtn.addEventListener("click", () => {
             this.ChangeTitle("All Tasks");
@@ -161,7 +162,8 @@ export default class DOMController {
             const deleteBtn = document.createElement("button");
             deleteBtn.textContent = "Delete";
             deleteBtn.addEventListener("click", () => {
-                
+                this.taskManager.deleteTask(task);
+                this.renderList();
             });
             taskElement.append(deleteBtn);
 
