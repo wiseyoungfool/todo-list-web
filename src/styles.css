@@ -71,6 +71,22 @@ aside {
     font-size: xx-large;
 }
 
+.dialog-buttons {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+dialog div form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    margin: 20px;
+}
+
+#new-task-btn {
+    margin: 30px;
+}
 .navbar button {
     width: 100%;
     text-align: left;

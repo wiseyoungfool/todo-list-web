@@ -18,4 +18,10 @@ export default class TaskManager {
     deleteTask(task) {
         this.todoList.pop(task);
     }
+
+    createTask(title, description, dueDate, project="Default", priority, completed=false) {
+        task = new Todo(title, description, dueDate, project, priority, completed);
+        this.addTask(task);
+        console.log("Task Added!");
+    }
 }

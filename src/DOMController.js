@@ -25,6 +25,26 @@ export default class DOMController {
 
         this.projectButtons = document.getElementById("project-buttons");
         this.newProjectBtn = document.getElementById("new-project-btn");
+        this.newTaskBtn = document.getElementById("new-task-btn");
+
+        this.newProjectDialog = document.getElementById("new-project-dialog");
+        this.newTaskDialog = document.getElementById("new-task-dialog");
+
+        this.projectCancelButton = document.getElementById("project-cancel-button");
+        this.taskCancelButton = document.getElementById("task-cancel-button");
+
+        this.projectSubmit = document.getElementById("project-submit");
+        this.taskSubmit = document.getElementById("task-submit");
+
+        this.projectCancelButton.addEventListener("click", () => {
+            this.newProjectDialog.close();
+        })
+        this.taskCancelButton.addEventListener("click", () => {
+            this.newTaskDialog.close();
+        })
+
+        this.projectSubmit.addEventListener("click", this.CreateNewProject);
+        this.taskSubmit.addEventListener("click", this.CreateNewTask);
 
         this.allBtn.addEventListener("click", () => {
             this.ChangeTitle("All Tasks");
@@ -38,7 +58,27 @@ export default class DOMController {
             this.ChangeTitle("This Week");
         });
 
+        this.newProjectBtn.addEventListener("click", () => {
+            this.newProjectDialog.show();
+        });
+
+        this.newTaskBtn.addEventListener("click", () => {
+            this.newTaskDialog.show();
+        });
+
         this.renderList(this.taskManager.getListAll());
+    }
+
+    CreateNewTask(event) {
+        event.preventDefault();
+        console.log("Created new task!");
+        document.getElementById("new-task-dialog").close();
+    }
+
+    CreateNewProject(event) {
+        event.preventDefault();
+        console.log("Created new project!");
+        document.getElementById("new-project-dialog").close();
     }
 
     ChangeTitle(title) {

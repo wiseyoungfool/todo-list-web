@@ -28,8 +28,34 @@
         </aside>
         <div id="content">
             <h1 id="project-title">All Tasks</h1>
+            <button id="new-task-btn">New Task</button>
             <div id="tasks-list"></div>
         </div>
+        <dialog id="new-project-dialog">
+            <div>
+                <form  class="new-project-form">
+                    <input type="text" placeholder="Title" name="title" required>
+                    <div class="dialog-buttons">
+                        <button id="project-submit" type="submit">Add Project</button>
+                        <button id="project-cancel-button">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </dialog>
+        <dialog id="new-task-dialog">
+            <div>
+                <form  class="new-task-form">
+                    <input type="text" placeholder="Title" name="title" required>
+                    <input type="text" placeholder="Description" name="description">
+                    <input type="date" name="due-date" required>
+                    <input type="number" placeholder="Priority" name="priority" required>
+                    <div class="dialog-buttons">
+                        <button id="task-submit" type="submit">Add Task</button>
+                        <button id="task-cancel-button">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </dialog>
     </main>
     <footer>Made by Brian Lynch</footer>
 </body>
