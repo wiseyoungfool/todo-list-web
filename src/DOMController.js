@@ -1,5 +1,6 @@
 import Todo from "./todo-item.js";
 import TaskManager from "./TaskManager.js";
+import { parseISO } from 'date-fns';
 
 export default class DOMController {
     constructor(taskManager) {
@@ -9,9 +10,9 @@ export default class DOMController {
         this.renderList = this.renderList.bind(this);
         this.renderProjects = this.renderProjects.bind(this);
 
-        let test = new Todo("test", "test description", "2024-10-02", "Default", 0);
-        let test2 = new Todo("test2", "test description", "2024-10-02", "Default", 0);
-        let test3 = new Todo("test3", "test description", "2024-10-02", "Default", 0);
+        let test = new Todo("test", "test description", new Date(), "Default", 0);
+        let test2 = new Todo("test2", "test description", new Date(), "Default", 0);
+        let test3 = new Todo("test3", "test description", new Date(), "Default", 0);
 
         this.taskManager.addTask(test);
         this.taskManager.addTask(test2);
@@ -97,13 +98,13 @@ export default class DOMController {
             document.getElementById("new-task-title").value = "";
             const desc = document.getElementById("new-task-desc").value;
             document.getElementById("new-task-desc").value = "";
-            const dueDate = document.getElementById("new-task-date").value;
+            const dueDateStr = document.getElementById("new-task-date").value;
             document.getElementById("new-task-date").value = "";
             const priority = document.getElementById("new-task-priority").value;
             document.getElementById("new-task-priority").value = "";
             const project = document.getElementById("new-task-project").value;
 
-
+            const dueDate = parseISO(dueDateStr);
             this.taskManager.createTask(title, desc, dueDate, project, priority, false);
             console.log("Created new task!");
             document.getElementById("new-task-dialog").close();

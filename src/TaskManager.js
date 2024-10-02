@@ -1,4 +1,5 @@
 import Todo from "./todo-item.js";
+import { isToday, isWithinInterval, addDays } from "date-fns";
 
 export default class TaskManager {
     constructor() {
@@ -29,11 +30,16 @@ export default class TaskManager {
     }
 
     getListToday() {
-
+        return this.todoList.filter(todo => isToday(todo.dueDate));
     }
 
     getListThisWeek() {
-        
+        const now = new Date();
+        const endOfNext7Days = addDays(now, 7);
+    
+        return this.todoList.filter(todo => 
+            isWithinInterval(todo.dueDate, { start: now, end: endOfNext7Days })
+        );
     }
 
     deleteTask(task) {
