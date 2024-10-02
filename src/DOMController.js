@@ -1,6 +1,6 @@
 import Todo from "./todo-item.js";
 import TaskManager from "./TaskManager.js";
-import { parseISO } from 'date-fns';
+import { parseISO , format } from 'date-fns';
 
 export default class DOMController {
     constructor(taskManager) {
@@ -10,13 +10,17 @@ export default class DOMController {
         this.renderList = this.renderList.bind(this);
         this.renderProjects = this.renderProjects.bind(this);
 
-        let test = new Todo("test", "test description", new Date(), "Default", 0);
-        let test2 = new Todo("test2", "test description", new Date(), "Default", 0);
-        let test3 = new Todo("test3", "test description", new Date(), "Default", 0);
+        let test = new Todo("test", "test description", new Date(), "Default", "Medium");
+        let test2 = new Todo("test2", "test description", new Date(), "Default", "Low");
+        let test3 = new Todo("test3", "test description", new Date(), "Default", "High");
+        let test4 = new Todo("Finish Todo List", "Finish the todo list for the odin project", new Date(2024, 9, 4), "Coding", "High");
+
+        this.taskManager.addProject("Coding");
 
         this.taskManager.addTask(test);
         this.taskManager.addTask(test2);
         this.taskManager.addTask(test3);
+        this.taskManager.addTask(test4);
 
         test.changePriority(1);
 
@@ -53,7 +57,7 @@ export default class DOMController {
         })
 
         this.newProjectForm.addEventListener("submit", this.CreateNewProject);
-        this.newTaskForm.addEventListener("submit", this.CreateNewTask);
+        
 
         this.allBtn.addEventListener("click", () => {
             this.ChangeCurrentProject("All Tasks");
@@ -72,8 +76,18 @@ export default class DOMController {
         });
 
         this.newTaskBtn.addEventListener("click", () => {
-            const projectSelector = document.getElementById("new-task-project");
+            this.ShowNewTaskDialog();
+        });
+
+        this.renderList(this.taskManager.getListAll());
+        this.renderProjects();
+    }
+
+    ShowNewTaskDialog() {
+        const projectSelector = document.getElementById("new-task-project");
             projectSelector.innerHTML = "";
+            document.getElementById("new-task-title").value = "";
+            document.getElementById("new-task-desc").value = "";
             this.taskManager.getProjectsList().forEach(project => {
                 const projectOption = document.createElement("option");
                 projectOption.value = project;
@@ -84,11 +98,22 @@ export default class DOMController {
 
                 projectSelector.appendChild(projectOption);
             });
+            document.getElementById("task-submit").textContent = "Add Task";
+            this.newTaskForm.removeEventListener("submit", this.EditTask);
+            this.newTaskForm.addEventListener("submit", this.CreateNewTask);
             this.newTaskDialog.show();
-        });
+    }
 
-        this.renderList(this.taskManager.getListAll());
-        this.renderProjects();
+    ShowEditTaskDialog(task) {
+        this.ShowNewTaskDialog();
+        this.taskSubmit.textContent = "Save Changes";
+        document.getElementById("new-task-title").value = task.title;
+        document.getElementById("new-task-desc").value = task.description;
+        document.getElementById("new-task-date").value = format(task.dueDate, 'yyyy-MM-dd')
+        document.getElementById("new-task-project").value = task.project;
+        document.getElementById("new-task-priority").value = task.priority;
+        this.newTaskForm.removeEventListener("submit", this.CreateNewTask);
+        this.newTaskForm.addEventListener("submit", (event) => this.EditTask(event, task));
     }
 
     CreateNewTask(event) {
@@ -109,7 +134,29 @@ export default class DOMController {
             console.log("Created new task!");
             document.getElementById("new-task-dialog").close();
 
-            this.renderList(this.taskManager.getListAll());
+            this.renderList(this.taskManager.getListProject(this.currentProject));
+        }
+    }
+
+    EditTask(event, task) {
+        if (document.querySelector("#new-task-form").checkValidity()) {
+            event.preventDefault();
+            const title = document.getElementById("new-task-title").value;
+            document.getElementById("new-task-title").value = "";
+            const desc = document.getElementById("new-task-desc").value;
+            document.getElementById("new-task-desc").value = "";
+            const dueDateStr = document.getElementById("new-task-date").value;
+            document.getElementById("new-task-date").value = "";
+            const priority = document.getElementById("new-task-priority").value;
+            document.getElementById("new-task-priority").value = "";
+            const project = document.getElementById("new-task-project").value;
+
+            const dueDate = parseISO(dueDateStr);
+            this.taskManager.editTask(task, title, desc, dueDate, project, priority, false);
+            console.log("Edited task!");
+            document.getElementById("new-task-dialog").close();
+
+            this.renderCurrentList(this.currentProject);
         }
     }
 
@@ -130,8 +177,13 @@ export default class DOMController {
         this.currentProject = title;
         this.projectTitle.textContent = title;
 
+        this.renderCurrentList(title);
+    }
+
+    renderCurrentList(title) {
         switch (title) {
-            case "All Tasks": this.renderList(this.taskManager.getListAll()); break;
+            case "All Tasks":
+            case "All": this.renderList(this.taskManager.getListAll()); break;
             case "Today": this.renderList(this.taskManager.getListToday()); break;
             case "This Week": this.renderList(this.taskManager.getListThisWeek()); break;
             default: this.renderList(this.taskManager.getListProject(title)); break;
@@ -147,7 +199,7 @@ export default class DOMController {
             projectButton.textContent = project;
 
             projectButton.addEventListener("click", () => {
-                this.renderList(this.taskManager.getListProject(project));
+                this.ChangeCurrentProject(project);
             })
             this.projectList.append(projectButton);
         })
@@ -180,18 +232,21 @@ export default class DOMController {
 
             const dueDate = document.createElement("div");
             dueDate.classList.add("due-date");
-            dueDate.textContent = "Due: " + task.dueDate;
+            dueDate.textContent = "Due: " + format(task.dueDate, 'yyyy-MM-dd');
             taskElement.append(dueDate);
 
             const editBtn = document.createElement("button");
             editBtn.textContent = "Edit";
+            editBtn.addEventListener("click", () => {
+                this.ShowEditTaskDialog(task);
+            });
             taskElement.append(editBtn);
 
             const deleteBtn = document.createElement("button");
             deleteBtn.textContent = "Delete";
             deleteBtn.addEventListener("click", () => {
                 this.taskManager.deleteTask(task);
-                this.renderList(this.taskManager.getListAll());
+                this.renderCurrentList(this.currentProject);
             });
             taskElement.append(deleteBtn);
 

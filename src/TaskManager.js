@@ -1,5 +1,5 @@
 import Todo from "./todo-item.js";
-import { isToday, isWithinInterval, addDays } from "date-fns";
+import { isToday, startOfDay, isWithinInterval, addDays } from "date-fns";
 
 export default class TaskManager {
     constructor() {
@@ -35,10 +35,11 @@ export default class TaskManager {
 
     getListThisWeek() {
         const now = new Date();
-        const endOfNext7Days = addDays(now, 7);
+        const today = startOfDay(now);
+        const endOfNext7Days = addDays(today, 7);
     
         return this.todoList.filter(todo => 
-            isWithinInterval(todo.dueDate, { start: now, end: endOfNext7Days })
+            isWithinInterval(todo.dueDate, { start: today, end: endOfNext7Days })
         );
     }
 
@@ -50,5 +51,14 @@ export default class TaskManager {
         const task = new Todo(title, description, dueDate, project, priority, completed);
         this.addTask(task);
         console.log("Task Added!");
+    }
+
+    editTask(task, title, description, dueDate, project="Default", priority, completed=false) {
+        task.title = title;
+        task.description = description;
+        task.dueDate = dueDate;
+        task.project = project;
+        task.priority = priority;
+        console.log("Task has been changed!");
     }
 }
