@@ -22,8 +22,6 @@ export default class DOMController {
         this.taskManager.addTask(test3);
         this.taskManager.addTask(test4);
 
-        test.changePriority(1);
-
         this.currentProject = "All";
         this.content = document.getElementById("content");
         this.projectTitle = document.getElementById("project-title");
@@ -106,6 +104,7 @@ export default class DOMController {
 
     ShowEditTaskDialog(task) {
         this.ShowNewTaskDialog();
+        event.stopPropagation();
         this.taskSubmit.textContent = "Save Changes";
         document.getElementById("new-task-title").value = task.title;
         document.getElementById("new-task-desc").value = task.description;
@@ -229,21 +228,35 @@ export default class DOMController {
                 check.checked = task.completed;
             });
 
+            // Title
             const taskTitle = document.createElement("div");
             taskTitle.classList.add("task-title");
             taskTitle.textContent = task.title;
             taskElement.append(taskTitle);
 
+            // Description
             const taskDesc = document.createElement("div");
             taskDesc.classList.add("task-desc");
             taskDesc.textContent = task.description;
             taskElement.append(taskDesc);
 
+            // Priority
+            const priority = document.createElement("div");
+            priority.classList.add("priority");
+            priority.textContent = "Priority: " + task.priority;
+            taskElement.append(priority);
+            switch (task.priority) {
+                case "High": taskElement.classList.add("High"); break;
+                case "Medium": taskElement.classList.add("Medium"); break;
+            }
+
+            // Due Date
             const dueDate = document.createElement("div");
             dueDate.classList.add("due-date");
             dueDate.textContent = "Due: " + format(task.dueDate, 'yyyy-MM-dd');
             taskElement.append(dueDate);
 
+            // Edit Button
             const editBtn = document.createElement("button");
             editBtn.textContent = "Edit";
             editBtn.addEventListener("click", () => {
@@ -251,6 +264,7 @@ export default class DOMController {
             });
             taskElement.append(editBtn);
 
+            // Delete Button
             const deleteBtn = document.createElement("button");
             deleteBtn.textContent = "Delete";
             deleteBtn.addEventListener("click", () => {

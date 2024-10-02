@@ -40,7 +40,7 @@ dialog {
 }
 
 .task {
-    background-color: green;
+    background-color: rgb(38, 128, 38);
     display: flex;
     gap: 10px;
     flex: auto;
@@ -49,7 +49,13 @@ dialog {
     border-radius: 20px;
     transition: .3s;
 }
+.High {
+    background-color: rgb(190, 26, 26);
+}
 
+.Medium {
+    background-color: rgb(180, 180, 28);
+}
 .completed {
     background-color: grey;
 }
@@ -63,7 +69,7 @@ dialog {
 }
 
 .task-desc {
-    color: grey;
+    color: darkslategray;
     margin-right: auto;
 }
 
