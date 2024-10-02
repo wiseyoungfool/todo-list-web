@@ -205,6 +205,12 @@ export default class DOMController {
         })
     }
 
+    toggleCompleted(task, taskElement) {
+        task.toggleCompleted();
+        if (task.completed) taskElement.classList.add("completed");
+        else taskElement.classList.remove("completed");
+    }
+
     renderList(list) {
         this.tasksList.innerHTML="";
         list.forEach((task, index) => {
@@ -214,11 +220,14 @@ export default class DOMController {
             const check = document.createElement("input");
             check.type = "checkbox";
             check.addEventListener("click", () => { 
-                task.toggleCompleted();
-                if (task.completed) taskElement.classList.add("completed");
-                else taskElement.classList.remove("completed");
+                this.toggleCompleted(task, taskElement);
             });
             taskElement.append(check);
+
+            taskElement.addEventListener("click", () => {
+                this.toggleCompleted(task, taskElement);
+                check.checked = task.completed;
+            });
 
             const taskTitle = document.createElement("div");
             taskTitle.classList.add("task-title");
