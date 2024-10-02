@@ -45,10 +45,22 @@
         <dialog id="new-task-dialog">
             <div>
                 <form id="new-task-form">
+                    <label for="new-task-title">Title:</label>
                     <input id="new-task-title" type="text" placeholder="Title" name="title" required>
+                    <label for="new-task-desc">Description:</label>
                     <input id="new-task-desc" type="text" placeholder="Description" name="description">
+                    <label for="new-task-date">Due Date:</label>
                     <input id="new-task-date" type="date" name="due-date" required>
-                    <input id="new-task-priority" type="number" placeholder="Priority" name="priority" required>
+                    <label for="new-task-project">Project:</label>
+                    <select id="new-task-project" name="project">
+                        <option value="Default" selected>Default</option>
+                    </select>
+                    <label for="new-task-priority">Priority:</label>
+                    <select id="new-task-priority" name="priority" required>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low" selected>Low</option>
+                    </select>
                     <div class="dialog-buttons">
                         <button id="task-submit" type="submit">Add Task</button>
                         <button id="task-cancel-button" type="button">Cancel</button>

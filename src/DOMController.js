@@ -7,6 +7,7 @@ export default class DOMController {
         this.CreateNewTask = this.CreateNewTask.bind(this);
         this.CreateNewProject = this.CreateNewProject.bind(this);
         this.renderList = this.renderList.bind(this);
+        this.renderProjects = this.renderProjects.bind(this);
 
         let test = new Todo("test", "test description", "2024-10-02", "Default", 0);
         let test2 = new Todo("test2", "test description", "2024-10-02", "Default", 0);
@@ -18,6 +19,7 @@ export default class DOMController {
 
         test.changePriority(1);
 
+        this.currentProject = "All";
         this.content = document.getElementById("content");
         this.projectTitle = document.getElementById("project-title");
         this.tasksList = document.getElementById("tasks-list");
@@ -53,15 +55,15 @@ export default class DOMController {
         this.newTaskForm.addEventListener("submit", this.CreateNewTask);
 
         this.allBtn.addEventListener("click", () => {
-            this.ChangeTitle("All Tasks");
+            this.ChangeCurrentProject("All Tasks");
         });
 
         this.todayBtn.addEventListener("click", () => {
-            this.ChangeTitle("Today");
+            this.ChangeCurrentProject("Today");
         });
 
         this.weekBtn.addEventListener("click", () => {
-            this.ChangeTitle("This Week");
+            this.ChangeCurrentProject("This Week");
         });
 
         this.newProjectBtn.addEventListener("click", () => {
@@ -69,10 +71,22 @@ export default class DOMController {
         });
 
         this.newTaskBtn.addEventListener("click", () => {
+            const projectSelector = document.getElementById("new-task-project");
+            projectSelector.innerHTML = "";
+            this.taskManager.getProjectsList().forEach(project => {
+                const projectOption = document.createElement("option");
+                projectOption.value = project;
+                projectOption.textContent = project;
+                if (project==="Default") {
+                    //Make default selected
+                }
+
+                projectSelector.appendChild(projectOption);
+            });
             this.newTaskDialog.show();
         });
 
-        this.renderList();
+        this.renderList(this.taskManager.getListAll());
         this.renderProjects();
     }
 
@@ -87,12 +101,14 @@ export default class DOMController {
             document.getElementById("new-task-date").value = "";
             const priority = document.getElementById("new-task-priority").value;
             document.getElementById("new-task-priority").value = "";
+            const project = document.getElementById("new-task-project").value;
 
-            this.taskManager.createTask(title, desc, dueDate, "Default", priority, false);
+
+            this.taskManager.createTask(title, desc, dueDate, project, priority, false);
             console.log("Created new task!");
             document.getElementById("new-task-dialog").close();
 
-            this.renderList();
+            this.renderList(this.taskManager.getListAll());
         }
     }
 
@@ -109,8 +125,16 @@ export default class DOMController {
         }
     }
 
-    ChangeTitle(title) {
+    ChangeCurrentProject(title) {
+        this.currentProject = title;
         this.projectTitle.textContent = title;
+
+        switch (title) {
+            case "All Tasks": this.renderList(this.taskManager.getListAll()); break;
+            case "Today": this.renderList(this.taskManager.getListToday()); break;
+            case "This Week": this.renderList(this.taskManager.getListThisWeek()); break;
+            default: this.renderList(this.taskManager.getListProject(title)); break;
+        }
     }
 
     renderProjects() {
@@ -121,13 +145,16 @@ export default class DOMController {
             const projectButton = document.createElement("button");
             projectButton.textContent = project;
 
+            projectButton.addEventListener("click", () => {
+                this.renderList(this.taskManager.getListProject(project));
+            })
             this.projectList.append(projectButton);
         })
     }
 
-    renderList() {
+    renderList(list) {
         this.tasksList.innerHTML="";
-        this.taskManager.getListAll().forEach((task, index) => {
+        list.forEach((task, index) => {
             const taskElement = document.createElement("div");
             taskElement.classList.add("task");
 
@@ -163,7 +190,7 @@ export default class DOMController {
             deleteBtn.textContent = "Delete";
             deleteBtn.addEventListener("click", () => {
                 this.taskManager.deleteTask(task);
-                this.renderList();
+                this.renderList(this.taskManager.getListAll());
             });
             taskElement.append(deleteBtn);
 

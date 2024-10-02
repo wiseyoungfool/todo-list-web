@@ -24,8 +24,16 @@ export default class TaskManager {
         return this.todoList;
     }
 
-    getListProject(project) {
-        return this.todoList.filter()
+    getListProject(projectName) {
+        return this.todoList.filter(todo => todo.project === projectName);
+    }
+
+    getListToday() {
+
+    }
+
+    getListThisWeek() {
+        
     }
 
     deleteTask(task) {
