@@ -58,7 +58,7 @@ export default class DOMController {
         });
 
         this.newProjectBtn.addEventListener("click", () => {
-            this.newProjectDialog.show();
+            this.newProjectDialog.showModal();
         });
 
         this.newTaskBtn.addEventListener("click", () => {
@@ -87,7 +87,7 @@ export default class DOMController {
             document.getElementById("task-submit").textContent = "Add Task";
             this.newTaskForm.removeEventListener("submit", this.EditTask);
             this.newTaskForm.addEventListener("submit", this.CreateNewTask);
-            this.newTaskDialog.show();
+            this.newTaskDialog.showModal();
     }
 
     ShowEditTaskDialog(task) {

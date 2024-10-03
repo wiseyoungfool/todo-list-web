@@ -35,7 +35,12 @@ dialog {
     border-radius: 20px;
     background-color: darkgreen;
     border: 2px solid green;
-    top: 25%;
+    box-shadow: 10px 10px 10px rgb(33, 36, 33);
+}
+
+dialog::backdrop {
+    backdrop-filter: blur(5px);
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 #tasks-list {
