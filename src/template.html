@@ -7,28 +7,29 @@
 </head>
 <body>
     <header>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>check-all</title><path d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg>
         <h1>Todo List</h1>
+        <button id="new-task-btn">+ New Task</button>
     </header>
     <main>
         <aside class="navbar">
 
             <h1>Home</h1>
 
-            <button id="all-btn">All</button>
-            <button id="today-btn">Today</button>
-            <button id="week-btn">This Week</button>
+            <button id="all-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>checkbox-multiple-marked</title><path d="M22,16A2,2 0 0,1 20,18H8C6.89,18 6,17.1 6,16V4C6,2.89 6.89,2 8,2H20A2,2 0 0,1 22,4V16M16,20V22H4A2,2 0 0,1 2,20V7H4V20H16M13,14L20,7L18.59,5.59L13,11.17L9.91,8.09L8.5,9.5L13,14Z" /></svg>All</button>
+            <button id="today-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>calendar-clock</title><path d="M15,13H16.5V15.82L18.94,17.23L18.19,18.53L15,16.69V13M19,8H5V19H9.67C9.24,18.09 9,17.07 9,16A7,7 0 0,1 16,9C17.07,9 18.09,9.24 19,9.67V8M5,21C3.89,21 3,20.1 3,19V5C3,3.89 3.89,3 5,3H6V1H8V3H16V1H18V3H19A2,2 0 0,1 21,5V11.1C22.24,12.36 23,14.09 23,16A7,7 0 0,1 16,23C14.09,23 12.36,22.24 11.1,21H5M16,11.15A4.85,4.85 0 0,0 11.15,16C11.15,18.68 13.32,20.85 16,20.85A4.85,4.85 0 0,0 20.85,16C20.85,13.32 18.68,11.15 16,11.15Z" /></svg>Today</button>
+            <button id="week-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>calendar-month</title><path d="M9,10V12H7V10H9M13,10V12H11V10H13M17,10V12H15V10H17M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5C3.89,21 3,20.1 3,19V5A2,2 0 0,1 5,3H6V1H8V3H16V1H18V3H19M19,19V8H5V19H19M9,14V16H7V14H9M13,14V16H11V14H13M17,14V16H15V14H17Z" /></svg>This Week</button>
 
             <h1>Projects</h1>
             <div id="project-list">
-                <button>Default</button>
+                <button><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>folder-check</title><path d="M13 19C13 19.34 13.04 19.67 13.09 20H4C2.9 20 2 19.11 2 18V6C2 4.89 2.89 4 4 4H10L12 6H20C21.1 6 22 6.89 22 8V13.81C21.12 13.3 20.1 13 19 13C15.69 13 13 15.69 13 19M21.34 15.84L17.75 19.43L16.16 17.84L15 19L17.75 22L22.5 17.25L21.34 15.84Z" /></svg>Default</button>
             </div>
 
-            <button id="new-project-btn">New Project</button>
+            <button id="new-project-btn">+ New Project</button>
 
         </aside>
         <div id="content">
             <h1 id="project-title">All Tasks</h1>
-            <button id="new-task-btn">New Task</button>
             <div id="tasks-list"></div>
         </div>
         <dialog id="new-project-dialog">
