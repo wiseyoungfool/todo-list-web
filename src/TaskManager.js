@@ -3,14 +3,57 @@ import { isToday, startOfDay, isWithinInterval, addDays } from "date-fns";
 
 export default class TaskManager {
     constructor() {
-        this.todoList = [];
-        this.projects = []
+        try {
+            const savedTodoList = localStorage.getItem("todoList");
+            const savedProjects = localStorage.getItem("projects");
 
-        this.projects.push("Default");
+            if (savedTodoList !== null && savedProjects !== null) {
+                // Parse the JSON strings back into arrays
+                const todoData = JSON.parse(savedTodoList);
+                this.projects = JSON.parse(savedProjects);
+                
+                // Reconstruct Todo objects from plain objects
+                this.todoList = todoData.map(task => {
+                    return new Todo(
+                        task.title,
+                        task.description,
+                        new Date(task.dueDate),
+                        task.project,
+                        task.priority,
+                        task.completed
+                    );
+                });
+            } else {
+                this.initializeDefaultData();
+            }
+        } catch (error) {
+            console.error("Error loading from localStorage:", error);
+            this.initializeDefaultData();
+        }
+    }
+
+    initializeDefaultData() {
+        this.todoList = [];
+        this.projects = [];
+
+        this.addProject("Default");
+
+        let test = new Todo("test", "test description", new Date(), "Default", "Medium");
+        let test2 = new Todo("test2", "test description", new Date(), "Default", "Low");
+        let test3 = new Todo("test3", "test description", new Date(), "Default", "High");
+        let test4 = new Todo("Finish Todo List", "Finish the todo list for the odin project", new Date(2024, 9, 4), "Coding", "High");
+
+        this.addProject("Coding");
+
+        this.addTask(test);
+        this.addTask(test2);
+        this.addTask(test3);
+        this.addTask(test4);
     }
 
     addProject(project) {
         this.projects.push(project);
+        this.saveToLocalStorage();
     }
 
     getProjectsList() {
@@ -19,6 +62,16 @@ export default class TaskManager {
 
     addTask(task) {
         this.todoList.push(task);
+        this.saveToLocalStorage();
+    }
+
+    saveToLocalStorage() {
+        try {
+            localStorage.setItem("todoList", JSON.stringify(this.todoList));
+            localStorage.setItem("projects", JSON.stringify(this.projects));
+        } catch (error) {
+            console.error("Error saving to localStorage:", error);
+        }
     }
 
     getListAll() {
@@ -44,7 +97,8 @@ export default class TaskManager {
     }
 
     deleteTask(task) {
-        this.todoList.pop(task);
+        this.todoList = this.todoList.filter(t => t !== task);
+        this.saveToLocalStorage();
     }
 
     createTask(title, description, dueDate, project="Default", priority, completed=false) {
@@ -59,6 +113,8 @@ export default class TaskManager {
         task.dueDate = dueDate;
         task.project = project;
         task.priority = priority;
+        task.completed = completed;
+        this.saveToLocalStorage();
         console.log("Task has been changed!");
     }
 }

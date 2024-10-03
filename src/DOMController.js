@@ -10,18 +10,6 @@ export default class DOMController {
         this.renderList = this.renderList.bind(this);
         this.renderProjects = this.renderProjects.bind(this);
 
-        let test = new Todo("test", "test description", new Date(), "Default", "Medium");
-        let test2 = new Todo("test2", "test description", new Date(), "Default", "Low");
-        let test3 = new Todo("test3", "test description", new Date(), "Default", "High");
-        let test4 = new Todo("Finish Todo List", "Finish the todo list for the odin project", new Date(2024, 9, 4), "Coding", "High");
-
-        this.taskManager.addProject("Coding");
-
-        this.taskManager.addTask(test);
-        this.taskManager.addTask(test2);
-        this.taskManager.addTask(test3);
-        this.taskManager.addTask(test4);
-
         this.currentProject = "All";
         this.content = document.getElementById("content");
         this.projectTitle = document.getElementById("project-title");
